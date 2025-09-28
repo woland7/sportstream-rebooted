@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        // Auto refresh every 5 minutes (300000 ms)
+        setTimeout(() => {
+            window.location.reload();
+        }, 300000);
+    </script>
+
+    <meta charset="UTF-8" />
+    <title>Live Matches - TV View</title>
+    <style>
+        /* Reset */
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            background-color: #121212; /* dark bg */
+            color: #eee;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 2.5rem;
+            line-height: 1.4;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #ffcc00;
+            text-shadow: 0 0 5px #ffcc00;
+        }
+
+        .refresh {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        button {
+            font-size: 2.5rem;
+            padding: 1rem 3rem;
+            background-color: #ffcc00;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #121212;
+            box-shadow: 0 0 10px #ffcc00;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover,
+        button:focus {
+            background-color: #ffaa00;
+            outline: none;
+        }
+
+        .match {
+            border: 3px solid #ffcc00;
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background-color: #1e1e1e;
+            box-shadow: 0 0 15px #ffcc00;
+        }
+
+        .match-title {
+            font-weight: 900;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ffcc00;
+            text-shadow: 0 0 8px #ffcc00;
+        }
+
+        .time {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #bbb;
+            font-style: italic;
+            text-shadow: 0 0 5px #000;
+        }
+
+        ul.channels {
+            list-style: none;
+            padding-left: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        ul.channels li {
+            flex: 1 1 40%;
+            min-width: 300px;
+        }
+
+        ul.channels li a {
+            display: block;
+            background-color: #333;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #ffcc00;
+            font-weight: 700;
+            font-size: 2rem;
+            text-align: center;
+            box-shadow: 0 0 10px #000;
+            transition: background-color 0.3s ease;
+        }
+
+        ul.channels li a:hover,
+        ul.channels li a:focus {
+            background-color: #ffaa00;
+            color: #121212;
+            outline: none;
+            box-shadow: 0 0 15px #ffaa00;
+        }
+
+        /* Responsive for smaller TVs */
+        @media (max-width: 1280px) {
+            body {
+                font-size: 2rem;
+                padding: 1rem;
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+            .match-title {
+                font-size: 2.5rem;
+            }
+            ul.channels li {
+                min-width: 220px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="refresh">
+    <form action="/refresh" method="post" aria-label="Refresh Matches">
+        <button type="submit">🔄 Refresh Matches</button>
+    </form>
+</div>
+
+<h1>Filtered Matches (Chelsea / Inter)</h1>
+
+{% if links %}
+{% for match in links %}
+<div class="match" tabindex="0" aria-label="{{ match.match }} at {{ match.time }}">
+    <div class="match-title">{{ match.match }}</div>
+    <div class="time">Kickoff: {{ match.time }}</div>
+    <ul class="channels">
+        {% for ch in match.channels %}
+        <li><a href="{{ ch.url }}" target="_blank" rel="noopener noreferrer">{{ ch.name }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+{% endfor %}
+{% else %}
+<p style="text-align:center; font-size:2rem;">No matches found for Chelsea or Inter.</p>
+{% endif %}
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Match Streams</title>
+    <style>
+        body { background: black; color: white; font-family: sans-serif; }
+        h1, h2 { color: #ffcc00; }
+        .match-block { margin-bottom: 2em; }
+        a { display: block; font-size: 1.2em; margin: 0.2em 0; color: #00aced; text-decoration: none; }
+        a:focus { background: #333; }
+        input[type="text"] {
+            width: 90%;
+            font-size: 1.5em;
+            padding: 0.5em;
+            margin: 1em;
+            background: #222;
+            color: white;
+            border: 1px solid #555;
+        }
+        small { color: #aaa; font-size: 0.9em; }
+    </style>
+    <script>
+        function filterMatches() {
+            const input = document.getElementById("search").value.toLowerCase();
+            const matchBlocks = document.querySelectorAll(".match-block");
+            matchBlocks.forEach(block => {
+                const title = block.querySelector("h2").innerText.toLowerCase();
+                block.style.display = title.includes(input) ? "block" : "none";
+            });
+        }
+    </script>
+</head>
+<body>
+<h1>Choose a Stream</h1>
+<input type="text" id="search" placeholder="Search match..." onkeyup="filterMatches()"/>
+
+{% for match_name, channels in grouped_matches.items() %}
+<div class="match-block">
+    <h2>{{ match_name }}</h2>
+    <small>{{ channels[0].time if channels[0].time }}</small>
+    <ul>
+        {% for ch in channels %}
+        <li>
+            <a href="/view?url={{ ch.url }}" tabindex="{{ loop.index }}">
+                {{ ch.channel_name }} <small>({{ ch.source }})</small>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endfor %}
+</body>
+</html>

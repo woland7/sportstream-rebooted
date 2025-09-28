@@ -1,8 +1,10 @@
 import asyncio
+import json
+import logging
+from sportstream_rebooted.scrapers.rojadirecta import scrape as scrape_rojadirecta
+from sportstream_rebooted.scrapers.daddylive import scrape as scrape_daddylive
 
-from src.scrapers.rojadirecta import scrape as scrape_rojadirecta
-from src.scrapers.daddylive import scrape as scrape_daddylive
-
+logger = logging.getLogger(__name__)
 scraped_links = []
 
 scrapers = {
@@ -30,4 +32,4 @@ async def scrape_links():
 
     scraped_links.clear()
     scraped_links.extend(all_matches)
-    print(f"✅ Total scraped: {len(scraped_links)}")
+    logger.info(f"✅ Total scraped: {len(scraped_links)}")

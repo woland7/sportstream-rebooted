@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+from sportstream_rebooted.core.config import settings
 
 def scrape():
     url = "https://www.rojadirectaenvivo.pl/programacion.php"
@@ -15,10 +16,11 @@ def scrape():
             continue
 
         title_text = title_element.get_text(separator=" ", strip=True).lower()
-
+        print(settings.teams)
         # Filter by team names: example is 'milan' or 'inter'
-        if "milan" not in title_text and "inter" not in title_text:
+        if not any(t.lower() in title_text.lower() for t in settings.teams):
             continue
+        print(title_text)
 
         match_name = title_element.contents[0].strip()
         time_span = title_element.find("span", class_="t")
